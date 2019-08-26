@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  dns-tls-proxy:
+    build: services/dns-tls-proxy
+    hostname: dns-tls-proxy
+    environment:
+    - PROXY_HOST=${PROXY_HOST}
+    - PROXY_PORT=${PROXY_PORT}
+    - PROXY_TRANSPORT=${PROXY_TRANSPORT}
+    - DNS_SERVER=${DNS_SERVER}
+
+  dns-client:
+    build: services/dns-client
+    depends_on:
+      - dns-tls-proxy
+    command: sh -c 'sleep 10; ${KDIG_CMD}'
